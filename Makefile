@@ -1,3 +1,7 @@
+ifeq ($(OS),Windows_NT) 
+	SHELL := pwsh.exe
+endif
+
 CC = gcc
 CFLAGS = -g -Wall
 
@@ -10,4 +14,9 @@ lib.o: lib.c lib.h
 	$(CC) $(CFLAGS) -c lib.c
 
 main: main.c files.o lib.o
-	$(CC) $(CFLAGS) -c main.c
+	$(CC) $(CFLAGS) -o $@ $^
+
+.PHONY: clean
+
+clean:
+	rm *.o

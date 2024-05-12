@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 
-char** read_maze(char* filename) {
+char read_maze(char* filename) {
   FILE* fp = fopen(filename, "r");
   char buf[1024];
   
