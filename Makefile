@@ -20,3 +20,4 @@ main: main.c files.o lib.o
 
 clean:
 	rm *.o
+	rm *.exe
