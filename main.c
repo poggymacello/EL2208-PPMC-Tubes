@@ -1,5 +1,8 @@
 #include "files.h"
+#include "lib.h"
 #include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 
 int main() {
   char filename[20];
@@ -8,11 +11,18 @@ int main() {
 
   int** maze;
   int row, col;
-  int* start;
-  int* dest;
+  Position* start = malloc(sizeof(Position));
+  Position* dest = malloc(sizeof(Position));
 
-  readMaze(filename, &maze, &row, &col, &start, &dest);
+  readMaze(filename, &maze, &row, &col, start, dest);
+  // printMatrix(row, col, maze);
+  // printf("\n");
 
-  printMatrix(row, col, maze);
+  clock_t begin = clock();
+  aStarSearch(maze, row, col, start, dest);
+  clock_t end = clock();
+  double time = (double)(end - begin)/CLOCKS_PER_SEC * 1000;
+  printf("Time: %f ms\n", time);
+
   return 0;
 }

@@ -1,8 +1,9 @@
+#include "lib.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 
-void readMaze(char* filename, int*** pMaze, int* pRow, int* pCol, int** pStart, int** pDest) {
+void readMaze(char* filename, int*** pMaze, int* pRow, int* pCol, Position* start, Position* dest) {
   FILE* fp = fopen(filename, "r");
   char buf[1024];
   
@@ -29,33 +30,31 @@ void readMaze(char* filename, int*** pMaze, int* pRow, int* pCol, int** pStart, 
     exit(0);
   }
 
-  *pStart = calloc(2, sizeof(int));
-  *pDest = calloc(2, sizeof(int));
   (*pMaze) = malloc((*pRow) * sizeof(int*));
   (*pMaze)[0] = malloc((*pCol) * sizeof(int));
 
   rewind(fp);
-  int ch, i = 0, j = 0;
+  int ch, y = 0, x = 0;
   while ((ch = getc(fp)) != EOF) {
     if (ch == '\n') {
-      i++;
-      (*pMaze)[i] = malloc((*pRow) * sizeof(int));
-      j = -1;
+      y++;
+      (*pMaze)[y] = malloc((*pCol) * sizeof(int));
+      x = -1;
     } else if (ch == 'S') {
-      (*pStart)[0] = i;
-      (*pStart)[1] = j;
-      (*pMaze)[i][j] = 1;
+      start->x = x;
+      start->y = y;
+      (*pMaze)[y][x] = 1;
     } else if (ch == 'E') {
-      (*pDest)[0] = i;
-      (*pDest)[1] = j;
-      (*pMaze)[i][j] = 1;
-    } else if (ch == '.') (*pMaze)[i][j] = 1;
-    else if (ch == '#') (*pMaze)[i][j] = 0;
+      dest->x = x;
+      dest->y = y;
+      (*pMaze)[y][x] = 1;
+    } else if (ch == '.') (*pMaze)[y][x] = 1;
+    else if (ch == '#') (*pMaze)[y][x] = 0;
     else {
       printf("Terdapat karakter tidak valid!\n");
       exit(0);
     }
-    j++;
+    x++;
   }
 
   fclose(fp);
