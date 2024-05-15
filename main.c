@@ -2,7 +2,7 @@
 #include "lib.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
+#include <sys/time.h>
 
 int main() {
   char filename[20];
@@ -15,14 +15,16 @@ int main() {
   Position* dest = malloc(sizeof(Position));
 
   readMaze(filename, &maze, &row, &col, start, dest);
-  // printMatrix(row, col, maze);
-  // printf("\n");
-
-  clock_t begin = clock();
+  
+  struct timeval begin, end;
+  gettimeofday(&begin, 0);
   aStarSearch(maze, row, col, start, dest);
-  clock_t end = clock();
-  double time = (double)(end - begin)/CLOCKS_PER_SEC * 1000;
-  printf("Time: %f ms\n", time);
+  gettimeofday(&end, 0);
+
+  long sec = end.tv_sec - begin.tv_sec;
+  long us = end.tv_usec - begin.tv_usec;
+  double elapsed = sec * 1e3 + us * 1e-3;
+  printf("Time: %lf ms\n", elapsed);
 
   return 0;
 }
